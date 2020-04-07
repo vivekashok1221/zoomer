@@ -18,10 +18,12 @@ def get_period():
         if periods[period][0] <= datetime.datetime.now().time() < periods[period][1]:
             print(f"period : {period}")
             return  period
+    print("No class at the moment")
+    input()
 
 def get_id():
     day = int(datetime.datetime.now().strftime("%w"))+1
-    print(f"Day: {datetime.datetime.now().strftime("%A")}")
+    print("Day:",datetime.datetime.now().strftime("%A"))
     period = get_period() 
     with open("timetable.csv","r") as timetable:
         timetableReader = list(csv.reader(timetable))
@@ -36,7 +38,7 @@ def get_pass(id):
         reader = csv.DictReader(passwords)
         for row in reader:
             if row["id"] == id:
-                print(f"subject : {row["sub"]})
+                print("subject:", row["sub"])
                 return row["password"]
 
 def zoom(id,password):
