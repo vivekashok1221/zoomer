@@ -1,3 +1,4 @@
+from os import startfile
 import time
 import datetime
 import csv
@@ -19,7 +20,7 @@ def get_period():
             print(f"period : {period}")
             return  period
     print("No class at the moment")
-    input()
+    input("press Enter to exit...")
 
 def get_id():
     day = int(datetime.datetime.now().strftime("%w"))+1
@@ -44,15 +45,19 @@ def get_pass(id):
 def zoom(id,password):
     keyboard = Controller()
     mouse = mController()
-    with keyboard.pressed(Key.alt_l):
-        keyboard.press(Key.tab)
-        keyboard.release(Key.tab)
+    if get_period() == 1:
+        startfile(r"C:\Users\Lenovo\AppData\Roaming\Zoom\bin\Zoom.exe")
+        time.sleep(2)
+    else:
+        with keyboard.pressed(Key.alt_l):
+            keyboard.press(Key.tab)
+            keyboard.release(Key.tab)
     time.sleep(1)
     mouse.position = 690,380
     mouse.click(Button.left)
     time.sleep(3)
     keyboard.type(id)
-    keyboard.press(Key.enter)
+    keyboard.press(Key.enter) 
     time.sleep(5)
     keyboard.type(password)
     keyboard.press(Key.enter)           
