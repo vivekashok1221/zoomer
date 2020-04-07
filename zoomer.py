@@ -1,7 +1,9 @@
 import time
 import datetime
 import csv
-from pynput.keyboard import Key,Controller,Events
+from pynput.keyboard import Key,Controller
+from pynput.mouse import Button
+from pynput.mouse import Controller as mController
 
 def get_period():
     periods = {
@@ -14,14 +16,17 @@ def get_period():
     }
     for period in periods:
         if periods[period][0] <= datetime.datetime.now().time() < periods[period][1]:
+            print(f"period : {period}")
             return  period
 
 def get_id():
     day = int(datetime.datetime.now().strftime("%w"))+1
+    print(f"Day: {datetime.datetime.now().strftime("%A")}")
     period = get_period() 
     with open("timetable.csv","r") as timetable:
         timetableReader = list(csv.reader(timetable))
         id = timetableReader[day][period]
+        print(f"id : {id}")
         # if id == "8240514257":
         #     return "9014681675" if (input("Sir/Maam: ")).lower() == "maam" else "8240514257"
         return id
@@ -31,10 +36,19 @@ def get_pass(id):
         reader = csv.DictReader(passwords)
         for row in reader:
             if row["id"] == id:
+                print(f"subject : {row["sub"]})
                 return row["password"]
 
 def zoom(id,password):
     keyboard = Controller()
+    mouse = mController()
+    with keyboard.pressed(Key.alt_l):
+        keyboard.press(Key.tab)
+        keyboard.release(Key.tab)
+    time.sleep(1)
+    mouse.position = 690,380
+    mouse.click(Button.left)
+    time.sleep(3)
     keyboard.type(id)
     keyboard.press(Key.enter)
     time.sleep(5)
