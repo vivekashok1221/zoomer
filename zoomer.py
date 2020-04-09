@@ -56,8 +56,10 @@ def zoom(id,password):
     mouse.position = 690,380
     mouse.click(Button.left)
     time.sleep(1)
+    mouse.position = 690,343
+    mouse.click(Button.left
     keyboard.type(id)
-    keyboard.press(Key.enter) 
+    keyboard.press(Key.enter)
     time.sleep(4)
     keyboard.type(password)
     keyboard.press(Key.enter)           
