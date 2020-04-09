@@ -1,4 +1,5 @@
 from os import startfile
+import subprocess
 import time
 import datetime
 import csv
@@ -8,7 +9,6 @@ from pynput.mouse import Controller as mController
 
 def get_period():
     periods = {
-        6 : (datetime.time(22,30),datetime.time(23,0)),
         1 : (datetime.time(7,30),datetime.time(8,40)),
         2 : (datetime.time(8,40),datetime.time(9,25)),
         3 : (datetime.time(9,25),datetime.time(10,15)),
@@ -40,6 +40,7 @@ def get_pass(id):
         for row in reader:
             if row["id"] == id:
                 print("subject:", row["sub"])
+                subprocess.run("clip",universal_newlines = True, input = row["password"])
                 return row["password"]
 
 def zoom(id,password):
@@ -55,9 +56,9 @@ def zoom(id,password):
     time.sleep(0.5)
     mouse.position = 690,380
     mouse.click(Button.left)
-    time.sleep(1)
+    time.sleep(2.5)
     mouse.position = 690,343
-    mouse.click(Button.left
+    mouse.click(Button.left)
     keyboard.type(id)
     keyboard.press(Key.enter)
     time.sleep(4)
