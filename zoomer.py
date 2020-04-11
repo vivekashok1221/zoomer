@@ -20,6 +20,7 @@ def get_period():
             return  period
     print("No class at the moment")
     input("press Enter to exit...")
+    raise SystemExit
 
 def get_id():
     day = int(datetime.datetime.now().strftime("%w"))+1
