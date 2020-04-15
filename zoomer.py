@@ -6,6 +6,7 @@ import csv
 from pynput.keyboard import Key,Controller
 from pynput.mouse import Button
 from pynput.mouse import Controller as mController
+import setupHelper
 
 def get_period():
     periods = {
@@ -22,50 +23,53 @@ def get_period():
     input("press Enter to exit...")
     raise SystemExit
 
-def get_id():
-    day = int(datetime.datetime.now().strftime("%w"))+1
-    print("Day:",datetime.datetime.now().strftime("%A"))
+def get_id(file):
+    file.seek(0)
     period = get_period()
+    timetableReader = list(csv.reader(file))
+    day = int(datetime.datetime.now().strftime("%w"))+1
+    id = timetableReader[day][period]
+    print("Day:",datetime.datetime.now().strftime("%A"))
     print(f"Period : {period}")
-    with open("timetable.csv","r") as timetable:
-        timetableReader = list(csv.reader(timetable))
-        id = timetableReader[day][period]
-        print(f"id : {id}")
-        # if id == "8240514257":
-        #     return "9014681675" if (input("Sir/Maam: ")).lower() == "maam" else "8240514257"
-        return id
+    print(f"id : {id}")
+    return id
 
-def get_pass(id):
-    with open("passwords.csv","r") as passwords:
-        reader = csv.DictReader(passwords)
-        for row in reader:
-            if row["id"] == id:
-                print("subject:", row["sub"])
-                subprocess.run("clip",universal_newlines = True, input = row["password"])
-                return row["password"]
+def get_pass(id,file):
+    file.seek(0)
+    reader = csv.DictReader(passwords)
+    for row in reader:
+        if row["id"] == id:
+            print("subject:", row["sub"])
+            subprocess.run("clip",universal_newlines = True, input = row["password"])
+            return row["password"]
 
-def zoom(id,password):
+def zoom(id,password,path,joinposn):
     keyboard = Controller()
     mouse = mController()
     if get_period() == 1:
-        startfile(r"C:\Users\Lenovo\AppData\Roaming\Zoom\bin\Zoom.exe")
-        time.sleep(2)
+        startfile(path)
+        time.sleep(1) #
     else:
         with keyboard.pressed(Key.alt_l):
             keyboard.press(Key.tab)
             keyboard.release(Key.tab)
-    time.sleep(0.5)
-    mouse.position = 690,380
+    time.sleep(0.5) #
+    mouse.position = joinposn
     mouse.click(Button.left)
-    time.sleep(2.5)
-    mouse.position = 690,343
-    mouse.click(Button.left)
+    time.sleep(1) #
     keyboard.type(id)
     keyboard.press(Key.enter)
-    time.sleep(4)
+    time.sleep(3.5) #
     keyboard.type(password)
     keyboard.press(Key.enter)           
 
-zoomId = get_id()
-zoomPass = get_pass(zoomId)
-zoom(zoomId,zoomPass)
+with open('timetable.csv','r') as timetable, open('passwords.csv','r') as passwords:
+    path = passwords.readlines()[-1] #r'C:\Users\Lenovo\AppData\Roaming\Zoom\bin\Zoom.exe'
+    if path[-3:] == 'cs2':
+        setupHelper.setup()
+    else:
+        joinposn = timetable.readlines()[-1].split(', ') #list(coordinates of join button)
+        zoomId = get_id(timetable)
+        zoomPass = get_pass(zoomId,passwords)
+        
+zoom(zoomId,zoomPass,path,joinposn)
