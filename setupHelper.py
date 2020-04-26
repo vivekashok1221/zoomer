@@ -1,3 +1,4 @@
+import configparser
 from pynput.mouse import Controller
 from pynput.keyboard import Key,Events
 def setup():
@@ -21,9 +22,13 @@ Open zoom and hover the mouse cursor above the \"join\" button and press <CTRL>.
                     posn = mouse.position
                     return str(posn)[1:-1]
 
-    with open('passwords.csv','a') as pw, open('timetable.csv','a') as t:           
-        pw.write('\n'+path)
-        t.write('\n'+ get_coord())
+    config = configparser.ConfigParser()
+    config.read('data.ini')
+    config.set('PATHS',"zoompath", path)
+    config.set('VALUES',"JOIN", get_coord())
+    
+    with open('data.ini','w') as data:
+        config.write(data)
 
     print("Restart zoomer")
     input("Press enter to exit...")
