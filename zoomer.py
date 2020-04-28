@@ -38,7 +38,7 @@ def get_id(file):
 
 def get_pass(id,file):
     file.seek(0)
-    reader = csv.DictReader(passwords)
+    reader = csv.DictReader(file)
     for row in reader:
         if row["id"] == id:
             print("subject:", row["subject"])
@@ -65,15 +65,19 @@ def zoom(id,password,path,joinposn):
     keyboard.type(password)
     keyboard.press(Key.enter)           
 
-with open('timetable.csv','r') as timetable, open('passwords.csv','r') as passwords:
-    config = configparser.ConfigParser()
-    config.read('data.ini')
-    path = config['PATHS']['zoompath']
-    if path[-3:] != 'exe':
-        setupHelper.setup()
-    else:
-        joinposn = config['VALUES']['join'].split(', ') #list(coordinates of join button)
-        zoomId = get_id(timetable)
-        zoomPass = get_pass(zoomId,passwords)
-        
-zoom(zoomId,zoomPass,path,joinposn)
+def main():
+    with open('timetable.csv','r') as timetable, open('passwords.csv','r') as passwords:
+        config = configparser.ConfigParser()
+        config.read('data.ini')
+        path = config['PATHS']['zoompath']
+        if path[-3:] != 'exe':
+            setupHelper.setup()
+        else:
+            joinposn = config['VALUES']['join'].split(', ') #list(coordinates of join button)
+            zoomId = get_id(timetable)
+            zoomPass = get_pass(zoomId,passwords)
+            
+    zoom(zoomId,zoomPass,path,joinposn)
+
+if __name__ == '__main__':
+    main()
