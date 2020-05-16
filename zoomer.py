@@ -1,83 +1,43 @@
-from os import startfile
-import subprocess
-import time
-import datetime
-import csv
+import argparse
 import configparser
-from pynput.keyboard import Key,Controller
-from pynput.mouse import Button
-from pynput.mouse import Controller as mController
-import setupHelper
+import zoomermodule as zm
 
-def get_period():
-    periods = {
-        1 : (datetime.time(7,30),datetime.time(8,40)),
-        2 : (datetime.time(8,40),datetime.time(9,25)),
-        3 : (datetime.time(9,25),datetime.time(10,15)),
-        4 : (datetime.time(10,15),datetime.time(11,15)),
-        5 : (datetime.time(11,15),datetime.time(12,15)),
-    }
-    for period in periods:
-        now = datetime.datetime.now()
-        if now.strftime("%w") not in ('5','6') and (periods[period][0] <= now.time() < periods[period][1]):
-            return  period
-    print("No class at the moment")
-    input("press Enter to exit...")
-    raise SystemExit
-
-def get_id(file):
-    file.seek(0)
-    period = get_period()
-    timetableReader = list(csv.reader(file))
-    day = int(datetime.datetime.now().strftime("%w"))+1
-    id = timetableReader[day][period]
-    print("Day:",datetime.datetime.now().strftime("%A"))
-    print(f"Period : {period}")
-    print(f"id : {id}")
-    return id
-
-def get_pass(id,file):
-    file.seek(0)
-    reader = csv.DictReader(file)
-    for row in reader:
-        if row["id"] == id:
-            print("subject:", row["subject"])
-            subprocess.run("clip",universal_newlines = True, input = row["password"])
-            return row["password"]
-
-def zoom(id,password,path,joinposn):
-    keyboard = Controller()
-    mouse = mController()
-    if get_period() == 1:
-        startfile(path)
-        time.sleep(1) #
+def main(option = None):
+    config = configparser.ConfigParser()
+    config.read('data.ini')
+    joinposn = config['VALUES']['join'].split(', ') #list(coordinates of join button)
+    if option == None:
+        zoomId = zm.get_id()
+        zoomPass = zm.get_pass(zoomId)
+    elif option == args.subject:
+        zoomId,zoomPass = zm.get_idpass_by_subject(option)
     else:
-        with keyboard.pressed(Key.alt_l):
-            keyboard.press(Key.tab)
-            keyboard.release(Key.tab)
-    time.sleep(0.5) #
-    mouse.position = joinposn
-    mouse.click(Button.left)
-    time.sleep(1) #
-    keyboard.type(id)
-    keyboard.press(Key.enter)
-    time.sleep(3.5) #
-    keyboard.type(password)
-    keyboard.press(Key.enter)           
-
-def main():
-    with open('timetable.csv','r') as timetable, open('passwords.csv','r') as passwords:
-        config = configparser.ConfigParser()
-        config.read('data.ini')
-        path = config['PATHS']['zoompath']
-        if path[-3:] != 'exe':
-            setupHelper.setup()
-        else:
-            joinposn = config['VALUES']['join'].split(', ') #list(coordinates of join button)
-            zoomId = get_id(timetable)
-            zoomPass = get_pass(zoomId,passwords)
-            
-    zoom(zoomId,zoomPass,path,joinposn)
+        zoomId,zoomPass = option
+    zm.zoom(zoomId,zoomPass,joinposn)
 
 if __name__ == '__main__':
-    main()
+
+    parser = argparse.ArgumentParser(description="Command line interface for zoomer.py",formatter_class = argparse.RawTextHelpFormatter)
+    parser.add_argument('-m',dest = 'subject',metavar = 'subject',help = "\ndescr:manually enter the subject \n\n")
+    parser.add_argument('-M',dest = 'ultramanual',nargs = 2,metavar = ('id','password'),help = "\ndescr:manually enter id and password \n\n")
+    parser.add_argument('-a',dest = 'append',nargs = 3,metavar = ('subject', 'id', 'password'),help = "descr:append data to passwords.csv \n\n")
+    parser.add_argument('-p','--passwd',dest = 'changepass',nargs = 2,metavar = ('subject','new_password'), help = 'descr:change the password corresponding to the subject \n\n') 
+    parser.add_argument('-u','--updatepass',dest = 'updatepass',metavar = 'path',help = "descr:updates passwords.csv with data extracted from docx at path \n\n")
+    parser.add_argument('-gmp','--getmousepos',action = 'store_true',help = "\ndescr:command to get mouse position \n")
+    args = parser.parse_args()
+    
+    if args.getmousepos:
+        zm.getjoinposn()
+    if args.updatepass != None:
+        zm.updatepass(args.updatepass)
+    if args.append != None:
+        zm.append(args.append)
+    if args.changepass != None:
+        zm.changepass(args.changepass)
+
+    if args.subject != None:
+        main(args.subject)
+    elif args.ultramanual != None:
+        main(args.ultramanual)
+    else:
+        main()
