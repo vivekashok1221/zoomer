@@ -1,8 +1,6 @@
 # zoomer
 This is a program that will enter the meeting id and password for zoom meetings, and I use it for my online classes. 
 
-```python zoomer.py -gmp```
-
 ### requirements:
 - pynput
 >download pynput by entering ```pip install pynput``` in cmd
