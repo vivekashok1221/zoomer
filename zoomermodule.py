@@ -134,5 +134,3 @@ def getjoinposn():
     print("\n>Mouse position successfully recorded!")
     input(">Press enter to exit...")
     raise SystemExit
-
-
