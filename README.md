@@ -1,14 +1,23 @@
 # zoomer
+This is a program that will enter the meeting id and password for zoom meetings, and I use it for my online classes. 
+
+```python zoomer.py -gmp```
 
 ### requirements:
 - pynput
 >download pynput by entering ```pip install pynput``` in cmd
 
-- docx
+- docx (*optional, comment the import*)
 >download docx by entering ```pip install python-docx``` in cmd
 
+### setting it up:
+Type ```python zoomer.py -gmp``` to set the position of join button.
+Make a ```timetable.csv``` and ```passwords.csv``` according to your needs (An example has been provided).
+A timetable is not necessary as a simple command line interface has been provided which will let you use the program more flexibily.
+
 #### make sure ```timetable.csv``` and ```passwords.csv``` are in the same folder as zoomer.py
-note: "timetable.csv" and "passwords.csv" have not been uploaded due to security reasons. 
+~~note: "timetable.csv" and "passwords.csv" have not been uploaded due to security reasons~~
+note: "password.csv" has been filled with my meeting id and meeting password and I consent to its use for demonstrative purposes.
 
 ## Command line interface
 A CLI has been added for additional functionality.
