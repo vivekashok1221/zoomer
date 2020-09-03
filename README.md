@@ -5,7 +5,7 @@ This is a program that will enter the meeting id and password for zoom meetings,
 - pynput
 - docx (*optional, comment the import*)
 
-## note: running `pip install -r requirements.txt` will install both pacakges.
+**note: running `pip install -r requirements.txt` will install both pacakges.**
 
 ### setting it up:
 Type ```python zoomer.py -gmp``` to set the position of join button.
