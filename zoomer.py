@@ -4,20 +4,24 @@ import configparser
 import utils
 
 
-def main(option=None):
+def main(subject):
     config = configparser.ConfigParser()
     config.read("data.ini")
     joinposn = config["VALUES"]["join"].split(", ")
     try:
         joinposn = [int(x) for x in joinposn]
     except ValueError:
-        print("Oops, it looks like you haven't set the positon of join button.")
+        # fmt: off
+        print(
+            "Oops, it looks like you haven't"
+            "set the positon of join button."
+            )
+        # fmt: on
 
-    if option is None:
-        zoomId, zoomPass = utils.get_credentials(utils.get_subject())
-    elif option == args.subject:
-        zoomId, zoomPass = utils.get_credentials(option)
+    if subject is None:
+        subject = utils.get_subject()
 
+    zoomId, zoomPass = utils.get_credentials(subject)
     utils.auto_type(zoomId, zoomPass, joinposn)
 
 
@@ -60,19 +64,22 @@ if __name__ == "__main__":
         "--updatepass",
         dest="updatepass",
         metavar="path",
-        help="descr:updates passwords.csv with data extracted from docx at path \n\n",
+        # fmt: off
+        help=(
+            "descr:updates passwords.csv with"
+            "data extracted from docx at path \n\n"
+        ),
+        # fmt: on
     )
     args = parser.parse_args()
 
     if args.getmousepos:
         utils.getjoinposn()
     elif args.updatepass is not None:
-        utils.updatepass(args.updatepass)
+        utils.update_pass(args.updatepass)
     elif args.append is not None:
         utils.append(args.append)
     elif args.changepass is not None:
-        utils.changepass(args.changepass)
-    elif args.subject is not None:
-        main(args.subject)
+        utils.change_pass(args.changepass)
     else:
-        main()
+        main(args.subject)

@@ -4,9 +4,10 @@ import datetime
 import time
 
 from docx import Document
-from pynput.keyboard import Controller, Events, Key
+from pynput.keyboard import Events, Key
+from pynput.keyboard import Controller as KB_Controller
 from pynput.mouse import Button
-from pynput.mouse import Controller as mController
+from pynput.mouse import Controller as Mouse_Controller
 
 
 def get_period(time):
@@ -47,14 +48,17 @@ def get_credentials(subject):
         for row in reader:
             if row["subject"].upper() == subject:
                 return row["id"], row["password"]
+        else:
+            print("Failed to obtain id and password")
+            raise SystemExit
 
 
 def auto_type(id, password, joinposn):
     """Executes actions on Zoom.exe"""
 
     print("id:", id)
-    keyboard = Controller()
-    mouse = mController()
+    keyboard = KB_Controller()
+    mouse = Mouse_Controller()
     with keyboard.pressed(Key.alt_l):
         keyboard.press(Key.tab)
         keyboard.release(Key.tab)
@@ -71,23 +75,13 @@ def auto_type(id, password, joinposn):
     keyboard.release(Key.enter)
 
 
-def get_idpass_by_subject(subject):
-    """ gets id and password with respect to subject """
-    subject = subject.upper()
-    with open("passwords.csv", "r") as passwords:
-        reader = csv.DictReader(passwords)
-        for row in reader:
-            if row["subject"].upper() == subject:
-                return row["id"], row["password"]
-
-
 def append(values):
     with open(r"passwords.csv", "a") as passwords:
         passwords.write(f"{values[0].upper()},{values[1]},{values[2]}\n")
     raise SystemExit
 
 
-def changepass(values):
+def change_pass(values):
     subject = values[0].upper()
     password = values[1]
     with open("passwords.csv", "r") as passwords:
@@ -103,11 +97,11 @@ def changepass(values):
         raise SystemExit
 
 
-def updatepass(newPassPath):
+def update_pass(path_to_new_pass):
     """updates passwords.csv with data extracted from newPassPath"""
     with open(r"passwords.csv", "w") as passwords:
         passwords.write("subject,id,password\n")
-        doc = Document(newPassPath)
+        doc = Document(path_to_new_pass)
         for table in doc.tables:
             for row in range(1, 8):
                 subject = table.cell(row, 2).text.strip()
@@ -118,7 +112,7 @@ def updatepass(newPassPath):
 
 
 def getjoinposn():
-    mouse = mController()
+    mouse = Mouse_Controller()
     print(
         "Open zoom and hover the mouse cursor "
         'above the "join" button and press <CTRL>.'
