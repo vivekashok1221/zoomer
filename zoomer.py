@@ -17,8 +17,7 @@ def main(option=None):
         zoomId, zoomPass = utils.get_credentials(utils.get_subject())
     elif option == args.subject:
         zoomId, zoomPass = utils.get_credentials(option)
-    else:
-        zoomId, zoomPass = option
+
     utils.auto_type(zoomId, zoomPass, joinposn)
 
 
@@ -40,13 +39,7 @@ if __name__ == "__main__":
         metavar="subject",
         help="\ndescr:manually enter the subject \n\n",
     )
-    parser.add_argument(
-        "-M",
-        dest="ultramanual",
-        nargs=2,
-        metavar=("id", "password"),
-        help="\ndescr:manually enter id and password \n\n",
-    )
+
     parser.add_argument(
         "-a",
         dest="append",
@@ -81,7 +74,5 @@ if __name__ == "__main__":
         utils.changepass(args.changepass)
     elif args.subject is not None:
         main(args.subject)
-    elif args.ultramanual is None:
-        main(args.ultramanual)
     else:
         main()
