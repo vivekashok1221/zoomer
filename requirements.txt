@@ -1,2 +1,2 @@
-pynput==1.6.8
-python-docx==0.8.10
+pynput
+python-docx
