@@ -24,8 +24,7 @@ Name         | Command             | Description
 -------------|---------------------|----------------------------------
  help        | -h, --help          |show help message and exit
  getmousepos  |-gmp, --getmousepos|command to get mouse position and update data.ini
-manual       |-m *subject*           |manually enter the subject      
-ultramanual  |-M *id password*      |manually enter id and password
+manual       |-m *subject*           |manually enter the subject
  append      |-a *subject id password*|append data to passwords.csv
 changepass   |-p *subject new_password*,<br> --passwd *subject new_password*|change the password corresponding to the subject                   
 updatepass   |-u *path*, <br>--updatepass *path*|updates passwords.csv with data extracted from docx at path

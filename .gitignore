@@ -1,3 +1,11 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+
+# editor files
+.vscode/
+
+# user configuration files
 passwords.csv
 timetable.csv
 newpasses.docx
+data.ini
