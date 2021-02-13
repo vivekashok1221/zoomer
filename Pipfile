@@ -1,0 +1,13 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+pynput = "==1.6.8"
+python-docx = "==0.8.10"
+
+[dev-packages]
+
+[requires]
+python_version = "3.8"
