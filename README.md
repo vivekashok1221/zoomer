@@ -1,6 +1,8 @@
 # zoomer
 This is a program that will enter the meeting id and password for zoom meetings, and I use it for my online classes. 
 
+This implementation uses mysql rather than CSV due to project requirements of my Computer Science Project 2020-21.
+
 ### requirements:
 - pynput
 - docx (*optional, comment the import*)
