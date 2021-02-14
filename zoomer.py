@@ -17,8 +17,6 @@ def main():
         utils.update_pass(args.updatepass)
     elif args.append is not None:
         utils.append(args.append)
-    elif args.changepass is not None:
-        utils.change_pass(args.changepass)
     else:
         config = configparser.ConfigParser()
         config.read("data.ini")

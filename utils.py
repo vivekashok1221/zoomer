@@ -90,22 +90,6 @@ def reset():
     print("Database deleted.")
 
 
-def change_pass(values):
-    subject = values[0].upper()
-    password = values[1]
-    with open("passwords.csv", "r") as passwords:
-        reader = list(csv.reader(passwords))
-        for row in reader:
-            if row[0].upper() == subject:
-                row[2] = password
-                break
-
-    with open("passwords.csv", "w") as asd:
-        for line in reader:
-            asd.write(f"{line[0]},{line[1]},{line[2]}\n")
-        raise SystemExit
-
-
 def update_pass(path_to_new_pass):
     """updates passwords with passwords extracted from a word doc."""
     conn, cursor = connect()

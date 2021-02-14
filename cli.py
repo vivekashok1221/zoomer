@@ -39,14 +39,7 @@ def parse_arguments():
         metavar=("subject", "id", "password"),
         help="descr:append data to passwords.csv \n\n",
     )
-    parser.add_argument(
-        "-p",
-        "--passwd",
-        dest="changepass",
-        nargs=2,
-        metavar=("subject", "new_password"),
-        help="descr:change the password corresponding to the subject \n\n",
-    )
+
     parser.add_argument(
         "-u",
         "--updatepass",
