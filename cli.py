@@ -7,6 +7,11 @@ def parse_arguments():
         formatter_class=argparse.RawTextHelpFormatter,
     )
 
+    parser.add_argument(
+        "--setup",
+        action="store_true",
+        help="sets up zoomer.py",
+    )
 
     parser.add_argument(
         "--reset",

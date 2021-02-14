@@ -118,7 +118,6 @@ def update_pass(path_to_new_pass):
             records = (subject, id, password)
             insert_records(cursor, records)
     conn.commit()
-    raise SystemExit
 
 
 def getjoinposn():
