@@ -25,6 +25,7 @@ The following list will help illustrate their use.
 Name         | Command             | Description
 -------------|---------------------|----------------------------------
  help        | -h, --help          |show help message and exit
+ reset       | --reset              | resets zoomer.py and clears the database.
  getmousepos  |-gmp, --getmousepos|command to get mouse position and update data.ini
 manual       |-m *subject*           |manually enter the subject
  append      |-a *subject id password*|append data to passwords.csv

@@ -7,6 +7,13 @@ def parse_arguments():
         formatter_class=argparse.RawTextHelpFormatter,
     )
 
+
+    parser.add_argument(
+        "--reset",
+        action="store_true",
+        help="resets zoomer.py and clears the database.",
+    )
+
     parser.add_argument(
         "-gmp",
         "--getmousepos",
