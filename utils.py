@@ -45,14 +45,17 @@ def get_subject():
 def get_credentials(subject):
     """Retrieves id and password corresponding to subject"""
     subject = subject.upper()
-    with open("passwords.csv", "r") as passwords:
-        reader = csv.DictReader(passwords)
-        for row in reader:
-            if row["subject"].upper() == subject:
-                return row["id"], row["password"]
-        else:
-            print("Failed to obtain id and password")
-            raise SystemExit
+    _, cursor = connect()
+    try:
+        cursor.execute(
+            "select id, password from passwords where subject=%s;", (subject,)
+        )
+        id, password = cursor.fetchone()
+    except Exception as err:
+        print(f"Failed to obtain id and password: {err}")
+        raise SystemExit
+    else:
+        return id, password
 
 
 def auto_type(id, password, joinposn):
