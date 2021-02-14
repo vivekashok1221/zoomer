@@ -4,10 +4,12 @@ import datetime
 import time
 
 from docx import Document
-from pynput.keyboard import Events, Key
 from pynput.keyboard import Controller as KB_Controller
+from pynput.keyboard import Events, Key
 from pynput.mouse import Button
 from pynput.mouse import Controller as Mouse_Controller
+
+from mysql_utils import connect, insert_records
 
 
 def get_period(time):
@@ -76,9 +78,16 @@ def auto_type(id, password, joinposn):
 
 
 def append(values):
-    with open(r"passwords.csv", "a") as passwords:
-        passwords.write(f"{values[0].upper()},{values[1]},{values[2]}\n")
-    raise SystemExit
+    conn, cursor = connect()
+    insert_records(cursor, values)
+    conn.commit()
+
+
+def reset():
+    conn, cursor = connect()
+    cursor.execute("DROP DATABASE ZOOMER;")
+    conn.commit()
+    print("Database deleted.")
 
 
 def change_pass(values):
@@ -98,16 +107,17 @@ def change_pass(values):
 
 
 def update_pass(path_to_new_pass):
-    """updates passwords.csv with data extracted from newPassPath"""
-    with open(r"passwords.csv", "w") as passwords:
-        passwords.write("subject,id,password\n")
-        doc = Document(path_to_new_pass)
-        for table in doc.tables:
-            for row in range(1, 8):
-                subject = table.cell(row, 2).text.strip()
-                id = table.cell(row, 3).text.strip()
-                password = table.cell(row, 4).text.strip()
-                passwords.write(f"{subject},{id},{password}\n")
+    """updates passwords with passwords extracted from a word doc."""
+    conn, cursor = connect()
+    doc = Document(path_to_new_pass)
+    for table in doc.tables:
+        for row in range(1, 8):
+            subject = table.cell(row, 2).text.strip()
+            id = table.cell(row, 3).text.strip()
+            password = table.cell(row, 4).text.strip()
+            records = (subject, id, password)
+            insert_records(cursor, records)
+    conn.commit()
     raise SystemExit
 
 

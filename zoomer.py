@@ -1,12 +1,17 @@
 import configparser
 from cli import parse_arguments
 import utils
+import setup_zoomer
 
 
 def main():
     args = parse_arguments()
 
-    if args.getmousepos:
+    if args.setup:
+        setup_zoomer.main()
+    elif args.reset:
+        utils.reset()
+    elif args.getmousepos:
         utils.getjoinposn()
     elif args.updatepass is not None:
         utils.update_pass(args.updatepass)
